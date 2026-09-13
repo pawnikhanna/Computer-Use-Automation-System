@@ -1,99 +1,94 @@
 # Computer-Use Automation System
 
-A small but complete implementation of interface.ai's take-home: an LLM-driven
-discovery agent that learns a UI flow once, records it as a typed reusable
-artifact, and a deterministic replay engine that executes that artifact
-without any model in the loop — plus guardrails and a human escalation
-mechanism.
+This is my submission for the interface.ai take-home. It's a system that:
 
-## What's here
+1. Uses an LLM to figure out how to do a task in a web app by actually clicking
+   around in a browser (I call this "discovery").
+2. Saves what it learned as a reusable recipe (I call this an "artifact").
+3. Replays that recipe later without using the LLM at all — just fast, predictable
+   browser automation.
+4. Knows when to stop and ask a human for help instead of guessing.
 
-- `mock_app/` — the target: a deliberately legacy-styled Flask bank
-  back-office console (table layouts, no test IDs, injected exceptional
-  states).
-- `artifacts/schema.py` — the typed Capability/Step/Locator contract.
-- `agent/` — the discovery loop: Claude (tool-calling) drives a real
-  Playwright browser and produces a saved artifact.
-- `replay/` — the deterministic replay engine: executes a saved artifact,
-  no LLM involved.
-- `guardrails/policy.py` — allowlist enforcement, risk classification,
-  redaction. Shared by both discovery and replay.
-- `recoverable.py` — shared handling for a randomly-appearing interstitial
-  notice, identical in both discovery and replay.
-- `escalation/handoff.py` — human-in-the-loop escalation: pauses replay on a
-  risky/irreversible step and exposes the live browser session via Chrome
-  DevTools Protocol for manual takeover.
-- `evidence/` — discovery and replay run logs land here automatically.
-- `tests/` — unit tests for everything that doesn't require a live browser
-  (guardrails, recoverable-condition matching, artifact schema round-trips,
-  business-outcome matching, escalation control-transfer).
+## Why it's built this way
 
-See `REPORT.md` for the full design write-up.
+Real banks have old internal tools with no clean HTML to hook into. So instead of
+using a real bank (I obviously don't have access to one), I built a small fake one
+that's deliberately old and ugly — table layouts, no IDs on anything, the kind of
+thing you'd actually find at a credit union in production.
 
-## Setup
+## What's in each folder
+
+- `mock_app/` — the fake bank app I'm automating against.
+- `agent/` — the part that uses Claude to figure out a task the first time.
+- `artifacts/` — the format I save a learned task in, plus the saved files themselves.
+- `replay/` — runs a saved task again, deterministically, no LLM involved.
+- `guardrails/` — the safety rules (what's allowed, what's risky, what gets redacted
+  from logs).
+- `recoverable.py` — handles a popup notice that randomly shows up on some pages.
+- `escalation/` — what happens when the system needs a human to step in.
+- `evidence/` — logs and screenshots from every run I did.
+- `tests/` — automated tests for everything that doesn't need a live browser.
+
+Full explanation of my decisions is in REPORT.md.
+
+## How to set it up
 
 ```bash
 python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
 cp .env.example .env
-# then edit .env and paste in your own ANTHROPIC_API_KEY
 ```
 
-You'll need your own Anthropic API key (console.anthropic.com, $5 minimum
-prepaid credit). A full discovery run costs a few cents.
+Then open `.env` and paste in your own Anthropic API key. You'll need one — it costs
+about $5 minimum to get set up, but a single run only costs a few cents.
 
-## Running it — the demo path
+## How to actually run it
 
-**Terminal 1** — start the target app and leave it running:
+**Terminal 1** — start the fake bank app and leave it running:
 ```bash
 python mock_app/app.py
 ```
 
-**Terminal 2** — run discovery (the genuine LLM-driven run), then replay
-deterministically:
+**Terminal 2** — everything else:
 
 ```bash
-# Discovery: a safe, read-only capability
+# Have the agent learn how to look up a member and read their balance
 python -m agent.discovery --flow lookup_balance --member-id 12345
 
-# Replay it — happy path
+# Replay that, same member — should succeed
 python -m replay.engine --capability-id lookup_member_savings_balance \
-  --param operator_username=operator --param operator_password=demo123 \
-  --param member_id=12345
+  --param operator_username=operator --param operator_password=demo123 --param member_id=12345
 
-# Replay it against a business outcome (member doesn't exist) --
-# NOT an error, a legitimate typed result:
+# Replay it with a member ID that doesn't exist — this should NOT crash,
+# it should come back as a normal "not found" result
 python -m replay.engine --capability-id lookup_member_savings_balance \
-  --param operator_username=operator --param operator_password=demo123 \
-  --param member_id=00000
-```
+  --param operator_username=operator --param operator_password=demo123 --param member_id=00000
 
-```bash
-# Discovery: a capability with a genuine risky/irreversible step
+# Have the agent learn a riskier task: opening a new sub-account
 python -m agent.discovery --flow open_subaccount --member-id 12345
 
-# Replay it -- this pauses for human confirmation before the final
-# irreversible click, and prints a live Chrome DevTools Protocol URL you can
-# open in your own browser to inspect/interact with the exact paused session.
+# Replay it — this one pauses partway through and asks a human to confirm
+# before it clicks the final "create account" button
 python -m replay.engine --capability-id open_subaccount_for_member \
   --param operator_username=operator --param operator_password=demo123 \
   --param member_id=12345 --param account_type=SAVINGS --param initial_deposit=100
 ```
 
-## Running without live services
+## Running without any of that
 
-Every unit test runs with no browser, no live app, and no API key:
+The tests don't need the browser, the app, or an API key:
 ```bash
 python -m pytest tests/ -v
 ```
 
-## Known constraints
+## Things I know are missing
 
-- Discovery requires a real Anthropic API key and a live browser; it cannot
-  be run offline or mocked (by design — see the brief's Section 4).
-- The mock app's session timeout is set generously (10 minutes) specifically
-  so a human has time to respond during a live escalation demo; a
-  production system would handle mid-flow session expiry via explicit
-  re-authentication (see REPORT.md, Section 7 — Cuts).
+- If a session times out while a human is being asked to confirm something, replay
+  doesn't automatically log back in and keep going — it just fails. I ran into this
+  for real while testing and worked around it by making the timeout longer. Doing
+  this properly (without risking accidentally doing something twice) needs more
+  thought than I had time for. Details in REPORT.md.
+- I only built one target app, so multi-tenant support and non-web (desktop) apps
+  are designed for but not actually built.
