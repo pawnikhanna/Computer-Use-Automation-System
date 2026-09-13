@@ -1,0 +1,10 @@
+{
+  "run_id": "replay_open_subaccount_for_member_20260913T223355Z",
+  "capability_id": "open_subaccount_for_member",
+  "step_id": "s11",
+  "reason": "Risky/irreversible action requires confirmation: 'Confirm and Open Account'",
+  "page_url": "http://127.0.0.1:5055/members/12345/open-subaccount/confirm?account_type=SAVINGS&deposit=100.0",
+  "screenshot_path": "/Users/pawni/cua-system/evidence/replay_open_subaccount_for_member_20260913T223355Z/escalation_s11.png",
+  "cdp_inspect_url": "http://127.0.0.1:9222",
+  "created_at": "2026-09-13T22:34:00.196900+00:00"
+}

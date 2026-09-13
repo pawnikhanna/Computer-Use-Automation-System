@@ -1,0 +1,60 @@
+[
+  {
+    "event": "navigate",
+    "step_id": "s0",
+    "path": "/login",
+    "status_code": 200,
+    "ts": "2026-09-13T22:33:28.347388+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s1",
+    "target": "Username:",
+    "value": "operator",
+    "ts": "2026-09-13T22:33:28.392948+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s2",
+    "target": "Password:",
+    "value": "demo123",
+    "ts": "2026-09-13T22:33:28.422373+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s3",
+    "target": "Log In",
+    "ts": "2026-09-13T22:33:29.003017+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s4",
+    "target": "Member Lookup",
+    "ts": "2026-09-13T22:33:29.565305+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s5",
+    "target": "Member ID:",
+    "value": "12345",
+    "ts": "2026-09-13T22:33:29.602017+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s6",
+    "target": "Search",
+    "ts": "2026-09-13T22:33:30.163830+00:00"
+  },
+  {
+    "event": "recoverable_condition_dismissed",
+    "condition": "system_notice_interstitial",
+    "ts": "2026-09-13T22:33:30.244078+00:00"
+  },
+  {
+    "event": "extract",
+    "step_id": "s7",
+    "output_name": "savings_balance",
+    "value": "[REDACTED_AMOUNT]",
+    "ts": "2026-09-13T22:33:30.779323+00:00"
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "status": "success",
+  "capability_id": "lookup_member_savings_balance",
+  "outputs": {
+    "savings_balance": "$4231.50"
+  },
+  "business_outcome_name": null,
+  "failure_step_id": null,
+  "failure_expected": null,
+  "failure_observed": null,
+  "evidence_dir": "/Users/pawni/cua-system/evidence/replay_lookup_member_savings_balance_20260913T223327Z",
+  "escalation_notes": null,
+  "locator_resolution_log": [
+    {
+      "step_id": "s1",
+      "strategy_used": "label_text",
+      "target": "Username:"
+    },
+    {
+      "step_id": "s2",
+      "strategy_used": "label_text",
+      "target": "Password:"
+    },
+    {
+      "step_id": "s3",
+      "strategy_used": "role_name",
+      "target": "Log In"
+    },
+    {
+      "step_id": "s4",
+      "strategy_used": "role_name",
+      "target": "Member Lookup"
+    },
+    {
+      "step_id": "s5",
+      "strategy_used": "label_text",
+      "target": "Member ID:"
+    },
+    {
+      "step_id": "s6",
+      "strategy_used": "role_name",
+      "target": "Search"
+    },
+    {
+      "step_id": "s7",
+      "strategy_used": "label_text",
+      "target": "Savings Balance"
+    }
+  ]
+}

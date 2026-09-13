@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "capability_id": "open_subaccount_for_member",
+  "outputs": {
+    "new_account_number": "900004"
+  },
+  "business_outcome_name": null,
+  "failure_step_id": null,
+  "failure_expected": null,
+  "failure_observed": null,
+  "evidence_dir": "/Users/pawni/cua-system/evidence/replay_open_subaccount_for_member_20260913T223355Z",
+  "escalation_notes": null,
+  "locator_resolution_log": [
+    {
+      "step_id": "s1",
+      "strategy_used": "label_text",
+      "target": "Username:"
+    },
+    {
+      "step_id": "s2",
+      "strategy_used": "label_text",
+      "target": "Password:"
+    },
+    {
+      "step_id": "s3",
+      "strategy_used": "role_name",
+      "target": "Log In"
+    },
+    {
+      "step_id": "s4",
+      "strategy_used": "role_name",
+      "target": "Member Lookup"
+    },
+    {
+      "step_id": "s5",
+      "strategy_used": "label_text",
+      "target": "Member ID:"
+    },
+    {
+      "step_id": "s6",
+      "strategy_used": "role_name",
+      "target": "Search"
+    },
+    {
+      "step_id": "s7",
+      "strategy_used": "role_name",
+      "target": "Open Sub-Account for this Member"
+    },
+    {
+      "step_id": "s8",
+      "strategy_used": "label_text",
+      "target": "Account Type:"
+    },
+    {
+      "step_id": "s9",
+      "strategy_used": "label_text",
+      "target": "Initial Deposit:"
+    },
+    {
+      "step_id": "s10",
+      "strategy_used": "role_name",
+      "target": "Continue"
+    },
+    {
+      "step_id": "s11",
+      "strategy_used": "role_name",
+      "target": "Confirm and Open Account"
+    },
+    {
+      "step_id": "s12",
+      "strategy_used": "label_text",
+      "target": "New Account Number"
+    }
+  ]
+}

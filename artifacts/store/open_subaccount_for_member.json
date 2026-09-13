@@ -1,0 +1,467 @@
+{
+  "capability_id": "open_subaccount_for_member",
+  "name": "Look up member and read savings balance",
+  "description": "Logs into the admin console, looks up a member by ID, and reads their current savings balance.",
+  "meta": {
+    "schema_version": "1.0",
+    "capability_version": 1,
+    "created_at": "2026-09-13T22:33:55.173055+00:00",
+    "discovered_by_model": "claude-haiku-4-5-20251001",
+    "discovery_run_id": "open_subaccount_for_member_20260913T223334Z"
+  },
+  "target_base_url": "http://127.0.0.1:5055",
+  "entry_path": "/login",
+  "requires_auth": true,
+  "input_params": [
+    {
+      "name": "operator_username",
+      "type": "string",
+      "required": true,
+      "description": "Value for control labeled 'Username:'",
+      "enum_values": null,
+      "example": "operator"
+    },
+    {
+      "name": "operator_password",
+      "type": "string",
+      "required": true,
+      "description": "Value for control labeled 'Password:'",
+      "enum_values": null,
+      "example": "demo123"
+    },
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "Value for control labeled 'Member ID:'",
+      "enum_values": null,
+      "example": "12345"
+    },
+    {
+      "name": "account_type",
+      "type": "string",
+      "required": true,
+      "description": "Value for control labeled 'Account Type:'",
+      "enum_values": null,
+      "example": "Savings"
+    },
+    {
+      "name": "initial_deposit",
+      "type": "string",
+      "required": true,
+      "description": "Value for control labeled 'Initial Deposit:'",
+      "enum_values": null,
+      "example": "100"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "new_account_number",
+      "type": "string",
+      "description": "Value labeled 'New Account Number'"
+    }
+  ],
+  "recoverable_conditions": [
+    {
+      "name": "system_notice_interstitial",
+      "detect_text": "SYSTEM NOTICE",
+      "dismiss_action": {
+        "description": "Acknowledge button on the system notice banner",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Acknowledge",
+            "robustness_note": "Banner is injected non-deterministically by the app; targeting by accessible button name is stable across appearances since the banner's markup doesn't change."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Acknowledge",
+            "robustness_note": "Fallback: exact visible text match."
+          }
+        ]
+      }
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "s0",
+      "action": "navigate",
+      "risk_level": "safe_reversible",
+      "url": "/login",
+      "target": null,
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Navigate to entry point /login"
+    },
+    {
+      "step_id": "s1",
+      "action": "fill",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Username:",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "Username:",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": "operator_username",
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "fill 'Username:' from parameter operator_username"
+    },
+    {
+      "step_id": "s2",
+      "action": "fill",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Password:",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "Password:",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": "operator_password",
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "fill 'Password:' from parameter operator_password"
+    },
+    {
+      "step_id": "s3",
+      "action": "click",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Log In",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Log In",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Log In",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(4) > td > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Log In'"
+    },
+    {
+      "step_id": "s4",
+      "action": "click",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Member Lookup",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Member Lookup",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Member Lookup",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(2) > td > a",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Member Lookup'"
+    },
+    {
+      "step_id": "s5",
+      "action": "fill",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Member ID:",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "Member ID:",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": "member_id",
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "fill 'Member ID:' from parameter member_id"
+    },
+    {
+      "step_id": "s6",
+      "action": "click",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Search",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Search",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Search",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(3) > td > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Search'"
+    },
+    {
+      "step_id": "s7",
+      "action": "click",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Open Sub-Account for this Member",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Open Sub-Account for this Member",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Open Sub-Account for this Member",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > p > a",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Open Sub-Account for this Member'"
+    },
+    {
+      "step_id": "s8",
+      "action": "select",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Account Type:",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "Account Type:",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > select",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": "account_type",
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "select 'Account Type:' from parameter account_type"
+    },
+    {
+      "step_id": "s9",
+      "action": "fill",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Initial Deposit:",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "Initial Deposit:",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": "initial_deposit",
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "fill 'Initial Deposit:' from parameter initial_deposit"
+    },
+    {
+      "step_id": "s10",
+      "action": "click",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "Continue",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Continue",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Continue",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(4) > td > input",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Continue'"
+    },
+    {
+      "step_id": "s11",
+      "action": "click",
+      "risk_level": "risky_irreversible",
+      "url": null,
+      "target": {
+        "description": "Confirm and Open Account",
+        "strategies": [
+          {
+            "kind": "role_name",
+            "value": "Confirm and Open Account",
+            "robustness_note": "Accessible name is stable even if visual styling changes."
+          },
+          {
+            "kind": "text_exact",
+            "value": "Confirm and Open Account",
+            "robustness_note": "Fallback: exact visible text match."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > input:nth-of-type(1)",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": null,
+      "extract_pattern": null,
+      "description": "Click 'Confirm and Open Account'"
+    },
+    {
+      "step_id": "s12",
+      "action": "extract",
+      "risk_level": "safe_reversible",
+      "url": null,
+      "target": {
+        "description": "New Account Number",
+        "strategies": [
+          {
+            "kind": "label_text",
+            "value": "New Account Number",
+            "robustness_note": "Legacy table-row layout convention: control sits in the cell following the cell containing this label text."
+          },
+          {
+            "kind": "css_fallback",
+            "value": "table:nth-of-type(2) > tbody > tr > td > table > tbody > tr:nth-of-type(2) > td:nth-of-type(2)",
+            "robustness_note": "Structural fallback only -- brittle to layout changes, last resort if semantic strategies fail."
+          }
+        ]
+      },
+      "input_binding": null,
+      "literal_value": null,
+      "extract_as": "new_account_number",
+      "extract_pattern": null,
+      "description": "Extract 'New Account Number' as new_account_number"
+    }
+  ],
+  "business_outcomes": [
+    {
+      "name": "member_not_found",
+      "detect_text": "No member found matching ID",
+      "detect_url_contains": null,
+      "detect_status_code": null,
+      "result_shape": {
+        "found": false
+      }
+    },
+    {
+      "name": "member_access_denied",
+      "detect_text": null,
+      "detect_url_contains": null,
+      "detect_status_code": 403,
+      "result_shape": {
+        "found": true,
+        "access_denied": true
+      }
+    }
+  ],
+  "success_checkpoint": {
+    "kind": "text_present",
+    "value": "Sub-account created successfully"
+  },
+  "tenant_overrides": null
+}

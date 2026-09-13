@@ -1,0 +1,104 @@
+[
+  {
+    "event": "navigate",
+    "step_id": "s0",
+    "path": "/login",
+    "status_code": 200,
+    "ts": "2026-09-13T22:33:56.563011+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s1",
+    "target": "Username:",
+    "value": "operator",
+    "ts": "2026-09-13T22:33:56.609059+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s2",
+    "target": "Password:",
+    "value": "demo123",
+    "ts": "2026-09-13T22:33:56.646921+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s3",
+    "target": "Log In",
+    "ts": "2026-09-13T22:33:57.218929+00:00"
+  },
+  {
+    "event": "recoverable_condition_dismissed",
+    "condition": "system_notice_interstitial",
+    "ts": "2026-09-13T22:33:57.294221+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s4",
+    "target": "Member Lookup",
+    "ts": "2026-09-13T22:33:58.374328+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s5",
+    "target": "Member ID:",
+    "value": "12345",
+    "ts": "2026-09-13T22:33:58.410298+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s6",
+    "target": "Search",
+    "ts": "2026-09-13T22:33:58.980433+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s7",
+    "target": "Open Sub-Account for this Member",
+    "ts": "2026-09-13T22:33:59.543807+00:00"
+  },
+  {
+    "event": "select",
+    "step_id": "s8",
+    "target": "Account Type:",
+    "value": "SAVINGS",
+    "ts": "2026-09-13T22:33:59.581873+00:00"
+  },
+  {
+    "event": "fill",
+    "step_id": "s9",
+    "target": "Initial Deposit:",
+    "value": "100",
+    "ts": "2026-09-13T22:33:59.587516+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s10",
+    "target": "Continue",
+    "ts": "2026-09-13T22:34:00.144782+00:00"
+  },
+  {
+    "event": "escalation_required",
+    "step_id": "s11",
+    "reason": "Risky/irreversible action requires confirmation: 'Confirm and Open Account'",
+    "ts": "2026-09-13T22:34:00.196890+00:00"
+  },
+  {
+    "event": "escalation_outcome",
+    "action": "retry",
+    "notes": "confirmed",
+    "ts": "2026-09-13T22:34:10.992662+00:00"
+  },
+  {
+    "event": "click",
+    "step_id": "s11",
+    "target": "Confirm and Open Account",
+    "ts": "2026-09-13T22:34:11.585527+00:00"
+  },
+  {
+    "event": "extract",
+    "step_id": "s12",
+    "output_name": "new_account_number",
+    "value": "[REDACTED_NUMBER]",
+    "ts": "2026-09-13T22:34:11.620199+00:00"
+  }
+]
